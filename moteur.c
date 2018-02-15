@@ -26,21 +26,24 @@ void creerZone(int t[TAILLE_X][TAILLE_Y]){
 }
 
 void monstre (int t[TAILLE_X][TAILLE_Y], int x, int y){
+	if (t[y-1]!=0 && t[y+1]!=0 && t[x+1]!=0 && t[x-1]!=0){	//si le monstre est entouré de 4 murs, on le tue
+		t[x][y] = 0;
+	}
 	int monstre=2;
-	srand(time(NULL));
-	int n = (rand()%3);
+	int n = (rand()%4);
 
-	if (n==0 && x<30 && y<20){
+
+	if (n==0){
 		//Avancer en avant
 		t[x][y] = 0;
 		t[x][y-1] = monstre;
 	}
-	else if(n==1 && x<30 && y<20){
+	else if(n==1 && t[x+1]==0){
 		//Avancer à droite
 		t[x][y] = 0;
 		t[x+1][y] = monstre;
 	}
-	else if (n==2 && x<30 && y<20){
+	else if (n==2 && t[){
 		//Avancer à gauche
 		t[x][y] = 0;
 		t[x-1][y] = monstre;
