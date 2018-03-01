@@ -31,7 +31,7 @@ void creerZone(int t[TAILLE_X][TAILLE_Y]){
 				t[i][j]=2;
 			}			
 
-			//une chance sur 40 d'avoir un mur, et si il y a déjà un mur à côté, 1 chance sur 2 e'en re-avoir un.
+			//une chance sur 40 d'avoir un mur, et si il y a déjà un mur à côté, 1 chance sur 2 d'en re-avoir un.
 			else if(rand()%TAUXDEMUR==15 || (t[i][j-1]==3 && rand()%3==1) || (t[i-1][j]==3 && rand()%2==1) )
 				t[i][j]=3;
 			else{
