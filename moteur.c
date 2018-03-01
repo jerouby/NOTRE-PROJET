@@ -2,8 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
-#define TAILLE_X 30
-#define TAILLE_Y 100
+#define TAILLE_X 31
+#define TAILLE_Y 101
 #define TEMPS_AFFICHAGE 1
 #define TAUXDEMUR 48	//-->une chance sur X d'avoir un mur
 
@@ -88,6 +88,7 @@ void creerZone(int t[TAILLE_X][TAILLE_Y]){
 	}while(t[xCoffre][yCoffre]!=0);
 		t[xCoffre][yCoffre]=4;
 
+			t[15][50]=111;				//on rajoute le personnage avec une zone de mur autour pour empêcher les monstres de spawnent
 
 	while(nbInitialMonstres>0){
 		int typeMonstre=rand()%5;
@@ -227,7 +228,7 @@ void bougerMonstres(int tab[TAILLE_X][TAILLE_Y], int listeMonstres[11][2], int s
 
 int main () {
 	int t[TAILLE_X][TAILLE_Y];
-	int jeu_fini = 0;			//variable =1 si le joueur a gagné ou 2 si il est mort
+	int jeuFini = 0;			//variable =1 si le joueur a gagné ou 2 si il est mort
 	int listeMonstres[11][2];		//liste de coordonnées des monstres, on considère qu'il y en aura au plus 10 (avec un -1 à la fin)
 	srand(time(NULL));
 	int nbMonstre = 0;
@@ -236,18 +237,25 @@ int main () {
 
 	creerZone(t);	//Initialisation de la zone
 
-	while(jeu_fini == 0){
+	while(jeuFini == 0){
 		afficher(t,vie,score);
 		score=rechercheMonstresEtMonstresMorts(t,listeMonstres,score); //le score augmentera si un monstre vient de mourrir
 		nbMonstre=nbMonstres(listeMonstres);
 		bougerMonstres(t,listeMonstres,score);
 
 
+		if(listeMonstres[0][0]==-1){jeuFini=1;} //le joueur a gagné
+		else if(vie==0){jeuFini=2;}		// le joueur a perdu
 		sleep(TEMPS_AFFICHAGE);
 
 	}
 
-	printf("\n Bien joué ! \n");
+	if(jeuFini==1){
+		printf("\n Bien joué ! \n");
+	}
+	else if(jeuFini==2){
+		printf("\n Vous êtes mort ! \n");
+	}
 	printf("Vous avez obtenu un score de : %d ! \n",score);
 	return 0;
 }
