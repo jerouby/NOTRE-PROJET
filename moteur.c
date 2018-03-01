@@ -17,6 +17,8 @@
 //7 --> ?
 //11 --> petits monstres (avec 1 point de vie)
 //21 ou 22 --> gros monstres (avec 1 ou 2 points de vie)
+//1xy --> personnage avec x arme qui regarde y direction
+
 
 void creerZone(int t[TAILLE_X][TAILLE_Y]){
 	int i,j=0;
