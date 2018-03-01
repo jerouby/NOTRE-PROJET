@@ -23,7 +23,7 @@
 void creerZone(int t[TAILLE_X][TAILLE_Y]){
 	int i,j=0;
 	int nbInitialMonstres=(rand()%8)+3; //au moins 3 monstres et au plus 10 monstres
-	
+
 	for (i=0;i<TAILLE_X;i++){
 		for(j=0;j<TAILLE_Y;j++){
 			if(i==0 || (i==TAILLE_X-1 && (j!=0 && j!=TAILLE_Y-1))){	//On définit la bordure d'écran verticale
@@ -67,28 +67,32 @@ void creerZone(int t[TAILLE_X][TAILLE_Y]){
 
 
 	int nbTrou = 0;
-                     
-                for(i=1;i<TAILLE_X-1;i++){		//On enlève les murs tous seuls
-                        for(j=1;j<TAILLE_Y-1;j++){
-                                nbTrou = 0;
-                                if(t[i][j]==3){
-                                        if(t[i-1][j]<=2){nbTrou++;}
-                                        if(t[i+1][j]<=2){nbTrou++;}
-                                        if(t[i][j-1]<=2){nbTrou++;}
-                                        if(t[i][j+1]<=2){nbTrou++;}
-                                        if(nbTrou==4){t[i][j]=0;}
-                                }
-                        }
-                }
+
+	for(i=1;i<TAILLE_X-1;i++){		//On enlève les murs tous seuls
+		for(j=1;j<TAILLE_Y-1;j++){
+			nbTrou = 0;
+			if(t[i][j]==3){
+				if(t[i-1][j]<=2){nbTrou++;}
+				if(t[i+1][j]<=2){nbTrou++;}
+				if(t[i][j-1]<=2){nbTrou++;}
+				if(t[i][j+1]<=2){nbTrou++;}
+				if(nbTrou==4){t[i][j]=0;}
+			}
+		}
+	}
 	int xCoffre = 0;
 	int yCoffre = 0;
 	do{						//On met un coffre au hasard sur la carte
 		xCoffre=(rand()%(TAILLE_X-5))+5;
 		yCoffre=(rand()%(TAILLE_Y-5))+5;
 	}while(t[xCoffre][yCoffre]!=0);
-		t[xCoffre][yCoffre]=4;
+	t[xCoffre][yCoffre]=4;
 
-			t[15][50]=111;				//on rajoute le personnage avec une zone de mur autour pour empêcher les monstres de spawnent
+	t[14][50]=3;t[13][50]=3;t[12][50]=3;t[16][50]=3;t[17][50]=3;t[18][50]=3;
+	t[15][49]=3;t[15][48]=3;
+	t[15][51]=3;t[15][52]=3;
+	t[14][49]=3;t[14][51]=3;t[16][49]=3;t[16][51]=3;
+	t[15][50]=111;				//on rajoute le personnage avec une zone de mur autour pour empêcher les monstres de spawnent
 
 	while(nbInitialMonstres>0){
 		int typeMonstre=rand()%5;
@@ -104,6 +108,11 @@ void creerZone(int t[TAILLE_X][TAILLE_Y]){
 		nbInitialMonstres--;
 
 	}
+	t[14][50]=0;t[13][50]=0;t[12][50]=0;t[16][50]=0;t[17][50]=0;t[18][50]=0;
+	t[15][49]=0;t[15][48]=0;
+	t[15][51]=0;t[15][52]=0;
+	t[14][49]=0;t[14][51]=0;t[16][49]=0;t[16][51]=0;	
+
 }
 
 
@@ -113,28 +122,28 @@ void monstre(int t[TAILLE_X][TAILLE_Y], int x, int y){
 	}					//pas si il est entouré de 3murs et le joueur.
 	int monstre=t[x][y];		//on regarde si c'est un petit ou un gros monstre (11 ou 21 ou 22)
 	int n = (rand()%4);
-
-	if (n==0 && t[x-1][y]==0){
-		//Avancer en haut
-		t[x][y] = 0;
-		t[x-1][y] = monstre;
+	if(rand()%3!=0){
+		if (n==0 && t[x-1][y]==0){
+			//Avancer en haut
+			t[x][y] = 0;
+			t[x-1][y] = monstre;
+		}
+		else if(n<=1 && t[x][y+1]==0){
+			//Avancer à droite
+			t[x][y] = 0;
+			t[x][y+1] = monstre;
+		}
+		else if (n<=2 && t[x][y-1]==0){
+			//Avancer à gauche
+			t[x][y] = 0;
+			t[x][y-1] = monstre;
+		}
+		else if(n<=3 && t[x+1][y]==0){
+			//Avancer en bas
+			t[x][y] = 0;
+			t[x+1][y] = monstre;
+		}
 	}
-	else if(n<=1 && t[x][y+1]==0){
-		//Avancer à droite
-		t[x][y] = 0;
-		t[x][y+1] = monstre;
-	}
-	else if (n<=2 && t[x][y-1]==0){
-		//Avancer à gauche
-		t[x][y] = 0;
-		t[x][y-1] = monstre;
-	}
-	else if(n<=3 && t[x+1][y]==0){
-		//Avancer en bas
-		t[x][y] = 0;
-		t[x+1][y] = monstre;
-	}
-
 }
 
 int monstreMort(int tab[TAILLE_X][TAILLE_Y],int x, int y){
@@ -174,7 +183,15 @@ void afficher(int tab[TAILLE_X][TAILLE_Y], int vie, int score){
 				case 11: printf("m"); break;
 				case 21: printf("M"); break;
 				case 22: printf("M"); break;
-				default: printf(" ");
+				default: if(tab[i][j]>=101 && tab[i][j]<=194){
+						 switch(tab[i][j]%10){
+							 case 1: printf("^"); break;
+							 case 2: printf("<"); break;
+							 case 3: printf("v"); break;
+							 case 4: printf(">"); break;
+						 }
+					 }
+					 else {printf(" ");}
 			}	
 		}
 		printf("\n");
