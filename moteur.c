@@ -5,7 +5,7 @@
 #define TAILLE_X 30
 #define TAILLE_Y 100
 #define TEMPS_AFFICHAGE 1
-#define TAUXDEMUR 49	//-->une chance sur X d'avoir un mur
+#define TAUXDEMUR 48	//-->une chance sur X d'avoir un mur
 
 //0 --> vide
 //1 --> murs horizontaux de la bordure
@@ -24,7 +24,7 @@ void creerZone(int t[TAILLE_X][TAILLE_Y]){
 	
 	for (i=0;i<TAILLE_X;i++){
 		for(j=0;j<TAILLE_Y;j++){
-			if(i==0 || (i==TAILLE_X-1 && (j!=0 && j!=TAILLE_Y-1))){	//On d&finit la bordure d'écran verticale
+			if(i==0 || (i==TAILLE_X-1 && (j!=0 && j!=TAILLE_Y-1))){	//On définit la bordure d'écran verticale
 				t[i][j]=1;		
 			}
 			else if(j==0 || j==TAILLE_Y-1 ){
@@ -149,8 +149,9 @@ void afficher(int tab[TAILLE_X][TAILLE_Y], int vie, int score){
 	int i=0;
 	int j=0;
 	int compteur = vie;
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
+	system("@cls||clear"); //pour effacer l'écran
+	printf("\n\n\n\n");
 	printf("      Vie :   ");			//on affiche la barre d'informations.
 	while(compteur>0){
 		if(compteur%2==0){printf("<");}
