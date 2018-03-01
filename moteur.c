@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
-#define TAILLE_X 30
-#define TAILLE_Y 100
 #define TAILLE_X 31
 #define TAILLE_Y 101
 #define TEMPS_AFFICHAGE 1
@@ -252,30 +250,30 @@ void deplacement(int tab[TAILLE_X][TAILLE_Y], int x, int y) {
         if (n>=1) {
                 if (c=='z') {
 			dir = 1;
-			if (tab[x][y-1]==0) {
-				tab[x][y] = 0;
-				y--;
-			}
-		}
-		else if (c=='q') {
-			dir = 2;
 			if (tab[x-1][y]==0) {
 				tab[x][y] = 0;
 				x--;
 			}
 		}
+		else if (c=='q') {
+			dir = 2;
+			if (tab[x][y-1]==0) {
+				tab[x][y] = 0;
+				y--;
+			}
+		}
 		else if (c=='s') {
 			dir = 3;
-			if (tab[x][y+1]==0) {
+			if (tab[x+1][y]==0) {
 				tab[x][y] = 0;
-				y++;
+				x++;
 			}
 		}
 		else if (c=='d') {
 			dir = 4;
-			if (tab[x+1][y]==0) {
+			if (tab[x][y+1]==0) {
 				tab[x][y] = 0;
-				x++;
+				y++;
 			}
 		}
 
@@ -307,7 +305,7 @@ int main () {
 		score=rechercheMonstresEtMonstresMorts(t,listeMonstres,score); //le score augmentera si un monstre vient de mourrir
 		nbMonstre=nbMonstres(listeMonstres);
 		bougerMonstres(t,listeMonstres,score);
-		deplacement();
+		deplacement(t, 15, 50);
 
 		if(listeMonstres[0][0]==-1){jeuFini=1;} //le joueur a gagné
 		else if(vie==0){jeuFini=2;}		// le joueur a perdu
