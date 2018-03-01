@@ -2,6 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
 #define TAILLE_X 30
 #define TAILLE_Y 100
 #define TEMPS_AFFICHAGE 1
@@ -18,7 +20,6 @@
 //11 --> petits monstres (avec 1 point de vie)
 //21 ou 22 --> gros monstres (avec 1 ou 2 points de vie)
 //1xy --> personnage avec x arme qui regarde y direction
-
 
 void creerZone(int t[TAILLE_X][TAILLE_Y]){
 	int i,j=0;
@@ -223,9 +224,26 @@ void bougerMonstres(int tab[TAILLE_X][TAILLE_Y], int listeMonstres[11][2], int s
 	}
 }
 
-
+void deplacement() {
+	char c;
+        int n;
+        printf("Tapez une touche...\n");
+        n = read(0, &c, 1);
+        if ((n>=1) && (c=='z')) {
+                printf("DEPLACEMENT EN HAUT\n");
+        }
+        return 0;
+}
 
 int main () {
+        fcntl(0, F_SETFL, O_NONBLOCK);
+        struct termios terminal;
+        tcgetattr(0, &terminal);
+        terminal.c_lflag &= ~(ICANON|ECHO);
+        terminal.c_cc[VTIME] = 1;
+        terminal.c_cc[VMIN] = 1;
+        tcsetattr(0, TCSANOW, &terminal);
+
 	int t[TAILLE_X][TAILLE_Y];
 	int jeu_fini = 0;			//variable =1 si le joueur a gagné ou 2 si il est mort
 	int listeMonstres[11][2];		//liste de coordonnées des monstres, on considère qu'il y en aura au plus 10 (avec un -1 à la fin)
